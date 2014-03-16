@@ -51,10 +51,10 @@ class Easter
     
     if day_easter < 11 then
       # Easter occurs in March.
-      return DateTime.new(y=some_year, m=3, d=day_easter + 21)
+      return Date.new(y=some_year, m=3, d=day_easter + 21)
     else
       # Easter occurs in April.
-      return DateTime.new(y=some_year, m=4, d=day_easter - 10)
+      return Date.new(y=some_year, m=4, d=day_easter - 10)
     end
     
   end
@@ -95,12 +95,17 @@ if $0 == __FILE__ then
 
   test_year = 2014
   out = []
-  out << "Ash Wednesday: ".ljust(15) + ash_wednesday(test_year).strftime("%D")
-  out << "Palm Sunday: ".ljust(15) + palm_sunday(test_year).strftime("%D")
-  out << "Good Friday: ".ljust(15) + good_friday(test_year).strftime("%D")
-  out << "Easter: ".ljust(15) + easter(test_year).strftime("%D")
-  out << "Ascension Day: ".ljust(15) + ascension_day(test_year).strftime("%D")
-  out << "Pentecost: ".ljust(15) + pentecost(test_year).strftime("%D")
+  out << "Ash Wednesday: ".ljust(15)\
+                        + Easter.ash_wednesday(test_year).strftime("%D")
+  out << "Palm Sunday: ".ljust(15)\
+                        + Easter.palm_sunday(test_year).strftime("%D")
+  out << "Good Friday: ".ljust(15)\
+                        + Easter.good_friday(test_year).strftime("%D")
+  out << "Easter: ".ljust(15) + Easter.easter(test_year).strftime("%D")
+  out << "Ascension Day: ".ljust(15)\
+                        + Easter.ascension_day(test_year).strftime("%D")
+  out << "Pentecost: ".ljust(15)\
+                        + Easter.pentecost(test_year).strftime("%D")
 
   puts out.join "\n"
 

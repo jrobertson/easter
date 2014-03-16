@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'easter'
-  s.version = '0.1.0'
+  s.version = '0.1.1'
   s.summary = 'Calculates Easter day as well as related days'
   s.description = 'Returns the date for Easter, Ash Wednesday, Palm Sunday, Good Friday, Ascension Day, and Pentecost.'
   s.authors = ['James Robertson']
