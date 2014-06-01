@@ -80,7 +80,7 @@ class Easter
   # Determines the date of Ascension Day for a given year.
   #
   def self.ascension_day(some_year=Time.now.year)
-    easter(some_year) + 39
+    easter(some_year) - 39
   end
 
   # Determines the date of Pentecost for a given year.
