@@ -20,6 +20,7 @@
 
 
 require 'date'
+require 'human_speakable'
 
 class Easter
 
@@ -58,12 +59,20 @@ class Easter
     end
     
   end
+  
+  def self.holy_thursday(some_year=Time.now.year)
+    easter(some_year) - 3
+  end    
 
   # Determine the date of Good Friday for a given year.
   #
   def self.good_friday(some_year=Time.now.year)
     easter(some_year) - 2
   end
+  
+  def self.holy_saturday(some_year=Time.now.year)
+    easter(some_year) - 1
+  end  
 
   # Determine the date of Palm Sunday for a given year.
   #
@@ -89,6 +98,65 @@ class Easter
     easter(some_year) + 49
   end
 
+end
+
+class EasterVoice
+  using HumanSpeakable
+  
+  def initialize(future: false)
+    @future = future
+  end
+
+  def easter()        date :easter                         end
+  def ascension_day() date :ascension_day, 'Ascension day' end
+  def ash_wednesday() date :ash_wednesday, 'Ash Wednesday' end
+  def good_friday()   date :good_friday,   'Good Friday'   end
+  def holy_thursday() date :holy_thursday, 'Holy Thursday' end        
+  def holy_saturday() date :holy_saturday, 'Holy Saturday' end    
+  def palm_sunday()   date :palm_sunday,   'Palm Sunday'   end
+  def pentecost()     date :pentecost,     'Pentecost'     end
+    
+  def easter_dates()
+    %i(ash_wednesday palm_sunday good_friday easter ascension_day  pentecost)\
+        .map {|day| method(day).call }.join("\n")
+  end
+  
+  
+  def lent_start() date :ash_wednesday, 'Lent'               end
+  def lent_end()   date :holy_thursday, 'The end of Lent'    end
+  
+  def lent()
+    
+    participle = case Date.today
+    when (Easter.ash_wednesday..Easter.holy_thursday) then 'is'      
+    when (Date.new(Date.year)..Easter.ash_wednesday) then 'will be'
+    else 
+      'was'
+    end
+    
+    days =  %i(ash_wednesday holy_thursday)\
+        .map {|x| Easter.method(x).call.humanize(year: true).sub(/on /,'') }
+    "Lent %s from %s to %s." % [participle, *days]
+  end
+  
+  private
+  
+  def date(s, label=s.to_s.capitalize)
+
+    d = Easter.method(s.to_sym).call    
+    
+    year = if d < Date.today and @future then
+      d = Easter.method(s.to_sym).call(Time.now.year+1)
+      ' ' + (Time.now.year+1).to_s
+    else
+      ''
+    end
+    
+    participle = d >= Date.today ? 'is' : 'was'
+    r = "%s %s %s" % [label, participle, d.humanize]
+    r + year + '.'
+  end
+  
 end
 
 if $0 == __FILE__ then
